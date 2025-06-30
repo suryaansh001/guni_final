@@ -1,0 +1,70 @@
+{
+  "node": {
+    "7f5d5e607a4a51cdbace7b196ea5530698b711aa3e": {
+      "workers": {
+        "app/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fsury%2Fproj%2Fguni%2Fgithub_guni_robots%2Fwebsite%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%7B%22id%22%3A%227f5d5e607a4a51cdbace7b196ea5530698b711aa3e%22%2C%22exportedName%22%3A%22syncKeylessConfigAction%22%7D%2C%7B%22id%22%3A%227fa76c62fa3ecb499b87637eee4f6b3239cedbcef9%22%2C%22exportedName%22%3A%22createOrReadKeylessAction%22%7D%2C%7B%22id%22%3A%227fedd0c22b536c7f43db58dc9dfc29d3ab1c5dc8de%22%2C%22exportedName%22%3A%22deleteKeylessAction%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": false
+        },
+        "app/admin/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fsury%2Fproj%2Fguni%2Fgithub_guni_robots%2Fwebsite%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%7B%22id%22%3A%227f5d5e607a4a51cdbace7b196ea5530698b711aa3e%22%2C%22exportedName%22%3A%22syncKeylessConfigAction%22%7D%2C%7B%22id%22%3A%227fa76c62fa3ecb499b87637eee4f6b3239cedbcef9%22%2C%22exportedName%22%3A%22createOrReadKeylessAction%22%7D%2C%7B%22id%22%3A%227fedd0c22b536c7f43db58dc9dfc29d3ab1c5dc8de%22%2C%22exportedName%22%3A%22deleteKeylessAction%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/page": "rsc",
+        "app/admin/page": "rsc"
+      }
+    },
+    "7fa76c62fa3ecb499b87637eee4f6b3239cedbcef9": {
+      "workers": {
+        "app/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fsury%2Fproj%2Fguni%2Fgithub_guni_robots%2Fwebsite%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%7B%22id%22%3A%227f5d5e607a4a51cdbace7b196ea5530698b711aa3e%22%2C%22exportedName%22%3A%22syncKeylessConfigAction%22%7D%2C%7B%22id%22%3A%227fa76c62fa3ecb499b87637eee4f6b3239cedbcef9%22%2C%22exportedName%22%3A%22createOrReadKeylessAction%22%7D%2C%7B%22id%22%3A%227fedd0c22b536c7f43db58dc9dfc29d3ab1c5dc8de%22%2C%22exportedName%22%3A%22deleteKeylessAction%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": false
+        },
+        "app/admin/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fsury%2Fproj%2Fguni%2Fgithub_guni_robots%2Fwebsite%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%7B%22id%22%3A%227f5d5e607a4a51cdbace7b196ea5530698b711aa3e%22%2C%22exportedName%22%3A%22syncKeylessConfigAction%22%7D%2C%7B%22id%22%3A%227fa76c62fa3ecb499b87637eee4f6b3239cedbcef9%22%2C%22exportedName%22%3A%22createOrReadKeylessAction%22%7D%2C%7B%22id%22%3A%227fedd0c22b536c7f43db58dc9dfc29d3ab1c5dc8de%22%2C%22exportedName%22%3A%22deleteKeylessAction%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/page": "rsc",
+        "app/admin/page": "rsc"
+      }
+    },
+    "7fedd0c22b536c7f43db58dc9dfc29d3ab1c5dc8de": {
+      "workers": {
+        "app/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fsury%2Fproj%2Fguni%2Fgithub_guni_robots%2Fwebsite%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%7B%22id%22%3A%227f5d5e607a4a51cdbace7b196ea5530698b711aa3e%22%2C%22exportedName%22%3A%22syncKeylessConfigAction%22%7D%2C%7B%22id%22%3A%227fa76c62fa3ecb499b87637eee4f6b3239cedbcef9%22%2C%22exportedName%22%3A%22createOrReadKeylessAction%22%7D%2C%7B%22id%22%3A%227fedd0c22b536c7f43db58dc9dfc29d3ab1c5dc8de%22%2C%22exportedName%22%3A%22deleteKeylessAction%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": false
+        },
+        "app/admin/page": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fsury%2Fproj%2Fguni%2Fgithub_guni_robots%2Fwebsite%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fkeyless-actions.js%22%2C%5B%7B%22id%22%3A%227f5d5e607a4a51cdbace7b196ea5530698b711aa3e%22%2C%22exportedName%22%3A%22syncKeylessConfigAction%22%7D%2C%7B%22id%22%3A%227fa76c62fa3ecb499b87637eee4f6b3239cedbcef9%22%2C%22exportedName%22%3A%22createOrReadKeylessAction%22%7D%2C%7B%22id%22%3A%227fedd0c22b536c7f43db58dc9dfc29d3ab1c5dc8de%22%2C%22exportedName%22%3A%22deleteKeylessAction%22%7D%5D%5D%5D&__client_imported__=!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/page": "rsc",
+        "app/admin/page": "rsc"
+      }
+    },
+    "7f8d719332f3be3e51ef38c76277700e287fa8f8f9": {
+      "workers": {
+        "app/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fsury%2Fproj%2Fguni%2Fgithub_guni_robots%2Fwebsite%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%7B%22id%22%3A%227f8d719332f3be3e51ef38c76277700e287fa8f8f9%22%2C%22exportedName%22%3A%22invalidateCacheAction%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/admin/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fsury%2Fproj%2Fguni%2Fgithub_guni_robots%2Fwebsite%2Fnode_modules%2F%40clerk%2Fnextjs%2Fdist%2Fesm%2Fapp-router%2Fserver-actions.js%22%2C%5B%7B%22id%22%3A%227f8d719332f3be3e51ef38c76277700e287fa8f8f9%22%2C%22exportedName%22%3A%22invalidateCacheAction%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/page": "action-browser",
+        "app/admin/page": "action-browser"
+      }
+    }
+  },
+  "edge": {},
+  "encryptionKey": "lrG+pHpLq6+tR2Ex9dcuKOskdQOEh/zUfEZpefrou7s="
+}
