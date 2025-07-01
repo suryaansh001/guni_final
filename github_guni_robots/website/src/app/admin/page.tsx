@@ -22,6 +22,26 @@ import {
   WifiOff
 } from 'lucide-react';
 
+// API Key type
+type ApiKey = {
+  id: string;
+  service_name: string;
+  masked_key: string;
+  is_active: boolean;
+  created_at: string;
+  usage_count?: number;
+};
+
+// Sync History type
+type SyncHistoryEntry = {
+  id: string;
+  created_at: string;
+  action_type: string;
+  service_name: string;
+  admin_user: string;
+  reason: string;
+};
+
 const AdminDashboard = () => {
   // State management
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
@@ -89,15 +109,29 @@ const AdminDashboard = () => {
   const [remoteStatus, setRemoteStatus] = useState('');
   const [remoteLoading, setRemoteLoading] = useState(false);
 
+  // Admin Authentication State
+  const [adminApiKey, setAdminApiKey] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showApiKeyForm, setShowApiKeyForm] = useState(true);
+  const [apiKeyInput, setApiKeyInput] = useState('');
+
   // API Configuration
-  const API_BASE = 'http://localhost:8001'; // Main FastAPI server with all admin routes
-  const ADMIN_API_KEY = 'guni-admin-demo-key'; // Should match server or use env
+  const API_BASE = 'https://aiec.guni.ac.in:3300'; // Main FastAPI server with all admin routes
 
   // API Headers
   const getHeaders = () => ({
     'Content-Type': 'application/json',
-    'x-admin-api-key': ADMIN_API_KEY
+    'x-admin-api-key': adminApiKey
   });
+
+  // Helper function to handle 401 errors consistently
+  const handle401Error = () => {
+    setError('Session expired or unauthorized. Please log in again.');
+    setIsAuthenticated(false);
+    setShowApiKeyForm(true);
+    setAdminApiKey('');
+    localStorage.removeItem('admin-api-key');
+  };
 
   // Fetch API Keys
   const fetchApiKeys = async () => {
@@ -114,6 +148,11 @@ const AdminDashboard = () => {
     console.log('Response status:', response.status);
     
     if (!response.ok) {
+      if (response.status === 401) {
+        // Handle unauthorized access
+        handle401Error();
+        return;
+      }
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
     
@@ -206,6 +245,10 @@ const fetchUsers = async () => {
       setUsers(data.users || []);
       setSuccess(`Loaded ${data.users?.length || 0} users`);
     } else {
+      if (response.status === 401) {
+        handle401Error();
+        return;
+      }
       setError(data.detail || 'Failed to fetch users');
     }
   } catch (err: any) {
@@ -230,6 +273,10 @@ const fetchConversations = async (page = 0) => {
       setConversationsPage(page);
       setSuccess(`Loaded ${data.conversations?.length || 0} conversations`);
     } else {
+      if (response.status === 401) {
+        handle401Error();
+        return;
+      }
       setError(data.detail || 'Failed to fetch conversations');
     }
   } catch (err: any) {
@@ -249,6 +296,10 @@ const fetchDatabaseStats = async () => {
     if (response.ok) {
       setDatabaseStats(data.stats || {});
     } else {
+      if (response.status === 401) {
+        handle401Error();
+        return;
+      }
       setError(data.detail || 'Failed to fetch database stats');
     }
   } catch (err: any) {
@@ -357,6 +408,10 @@ const debugDatabaseStatus = async () => {
       const response = await fetch(`${API_BASE}/admin/robot/status`, {
         headers: getHeaders()
       });
+      if (response.status === 401) {
+        handle401Error();
+        return;
+      }
       const data = await response.json();
       setPiStatus(data);
     } catch (err) {
@@ -703,19 +758,87 @@ const debugDatabaseStatus = async () => {
     }
   };
 
-  // Initialize data
+  // Admin Authentication Functions
+  const authenticateAdmin = async () => {
+    if (!apiKeyInput.trim()) {
+      setError('Please enter an API key');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError('');
+      
+      // Test the API key by making a simple request
+      const response = await fetch(`${API_BASE}/admin/api-keys`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-api-key': apiKeyInput.trim()
+        }
+      });
+      
+      if (response.ok) {
+        setAdminApiKey(apiKeyInput.trim());
+        setIsAuthenticated(true);
+        setShowApiKeyForm(false);
+        setApiKeyInput('');
+        setSuccess('Successfully authenticated as admin');
+        
+        // Store in localStorage for session persistence
+        localStorage.setItem('admin-api-key', apiKeyInput.trim());
+      } else {
+        setError('Invalid admin API key. Please check your credentials.');
+      }
+    } catch (err: any) {
+      setError(`Authentication failed: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const logoutAdmin = () => {
+    setAdminApiKey('');
+    setIsAuthenticated(false);
+    setShowApiKeyForm(true);
+    setApiKeyInput('');
+    localStorage.removeItem('admin-api-key');
+    setSuccess('Logged out successfully');
+  };
+
+  const changeApiKey = () => {
+    setShowApiKeyForm(true);
+    setApiKeyInput('');
+  };
+
+  // Check for stored API key on component mount
   useEffect(() => {
-    fetchApiKeys();
-    fetchPiStatus();
-    fetchSyncHistory();
-    fetchUsers();
-    fetchConversations();
-    fetchDatabaseStats();
-    
-    // Set up periodic Pi status check
-    const interval = setInterval(fetchPiStatus, 30000); // Every 30 seconds
-    return () => clearInterval(interval);
+    const storedKey = localStorage.getItem('admin-api-key');
+    if (storedKey) {
+      setAdminApiKey(storedKey);
+      setIsAuthenticated(true);
+      setShowApiKeyForm(false);
+    }
   }, []);
+
+  // Initialize data only when authenticated
+  useEffect(() => {
+    if (isAuthenticated && adminApiKey) {
+      fetchApiKeys();
+      fetchPiStatus();
+      fetchSyncHistory();
+      fetchUsers();
+      fetchConversations();
+      fetchDatabaseStats();
+    }
+  }, [isAuthenticated, adminApiKey]);
+
+  // Set up periodic Pi status check when authenticated
+  useEffect(() => {
+    if (isAuthenticated && adminApiKey) {
+      const interval = setInterval(fetchPiStatus, 30000); // Every 30 seconds
+      return () => clearInterval(interval);
+    }
+  }, [isAuthenticated, adminApiKey]);
 
   // Clear messages after 5 seconds
   useEffect(() => {
@@ -730,24 +853,86 @@ const debugDatabaseStatus = async () => {
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
+      {/* Admin API Key Authentication Form */}
+      {showApiKeyForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle>Admin Authentication</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Admin API Key</label>
+                  <input
+                    type="password"
+                    value={apiKeyInput}
+                    onChange={(e) => setApiKeyInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && authenticateAdmin()}
+                    className="w-full p-2 border rounded-lg"
+                    placeholder="Enter your admin API key"
+                    autoFocus
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={authenticateAdmin}
+                    disabled={loading || !apiKeyInput.trim()}
+                    className="flex-1 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50"
+                  >
+                    {loading ? 'Authenticating...' : 'Authenticate'}
+                  </button>
+                </div>
+                <p className="text-sm text-gray-600">
+                  Enter your admin API key to access the dashboard.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
-        <p className="text-gray-600">Manage API keys and database synchronization</p>
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
+            <p className="text-gray-600">Manage API keys and database synchronization</p>
+          </div>
+          {isAuthenticated && (
+            <div className="flex items-center gap-4">
+              <button
+                onClick={changeApiKey}
+                className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+              >
+                Change API Key
+              </button>
+              <button
+                onClick={logoutAdmin}
+                className="px-3 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200"
+              >
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Pi Status */}
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            {piStatus.status === 'online' ? (
-              <Wifi className="w-5 h-5 text-green-500" />
-            ) : (
-              <WifiOff className="w-5 h-5 text-red-500" />
-            )}
-            Raspberry Pi Status
-          </CardTitle>
-        </CardHeader>
+      {/* Main Dashboard Content - Only show when authenticated */}
+      {isAuthenticated && (
+        <>
+          {/* Pi Status */}
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                {piStatus.status === 'online' ? (
+                  <Wifi className="w-5 h-5 text-green-500" />
+                ) : (
+                  <WifiOff className="w-5 h-5 text-red-500" />
+                )}
+                Raspberry Pi Status
+              </CardTitle>
+            </CardHeader>
         <CardContent>
           <div className="flex items-center gap-4">
             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
@@ -779,6 +964,49 @@ const debugDatabaseStatus = async () => {
           <CheckCircle className="w-4 h-4 text-green-500" />
           <AlertDescription className="text-green-800">{success}</AlertDescription>
         </Alert>
+      )}
+
+      {/* Admin API Key Form */}
+      {showApiKeyForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle>Admin Authentication</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">API Key</label>
+                  <input
+                    type="password"
+                    value={apiKeyInput}
+                    onChange={(e) => setApiKeyInput(e.target.value)}
+                    className="w-full p-2 border rounded-lg"
+                    placeholder="Enter admin API key"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={authenticateAdmin}
+                    disabled={loading}
+                    className="flex-1 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50"
+                  >
+                    {loading ? 'Authenticating...' : 'Login as Admin'}
+                  </button>
+                  <button
+                    onClick={logoutAdmin}
+                    className="flex-1 bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600"
+                  >
+                    Logout
+                  </button>
+                </div>
+                <div className="text-sm text-gray-500">
+                  Note: This API key is different from the user API keys. It provides access to admin features.
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       )}
 
       {/* Tab Navigation */}
@@ -1591,28 +1819,25 @@ const debugDatabaseStatus = async () => {
           </Card>
         </div>
       )}
+        </>
+      )}
+
+      {/* Alerts - Always show */}
+      {error && (
+        <Alert className="mb-4 border-red-200 bg-red-50">
+          <XCircle className="w-4 h-4 text-red-500" />
+          <AlertDescription className="text-red-800">{error}</AlertDescription>
+        </Alert>
+      )}
+
+      {success && (
+        <Alert className="mb-4 border-green-200 bg-green-50">
+          <CheckCircle className="w-4 h-4 text-green-500" />
+          <AlertDescription className="text-green-800">{success}</AlertDescription>
+        </Alert>
+      )}
     </div>
   );
 };
 
 export default AdminDashboard;
-
-// API Key type
-type ApiKey = {
-  id: string;
-  service_name: string;
-  masked_key: string;
-  is_active: boolean;
-  created_at: string;
-  usage_count?: number;
-};
-
-// Sync History type
-type SyncHistoryEntry = {
-  id: string;
-  created_at: string;
-  action_type: string;
-  service_name: string;
-  admin_user: string;
-  reason: string;
-};
