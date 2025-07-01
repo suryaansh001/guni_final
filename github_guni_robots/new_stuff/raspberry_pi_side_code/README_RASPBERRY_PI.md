@@ -204,11 +204,60 @@ sudo systemctl start robot-face.service
 ## File Structure
 
 ```
-robot/
-├── talking.py                    # Main robot face client
-├── enhanced_expressions.json     # Expression configurations
-├── robot_env/                   # Virtual environment
-└── README_RASPBERRY_PI.md       # This documentation
+new_stuff/raspberry_pi_side_code/
+├── README_RASPBERRY_PI.md       # This comprehensive setup guide
+├── talk.py                      # 🔥 MAIN: Complete robot face application (2400+ lines)
+│   ├── VoiceAssistantClient     # Voice processing and API communication
+│   ├── RobotFace               # OpenGL-based facial expression system
+│   ├── TextOverlay             # Real-time text display with word wrapping
+│   ├── ExpressionManager       # 20+ animated facial expressions
+│   ├── AudioManager            # Voice input/output handling
+│   └── ConversationManager     # AI conversation flow control
+└── mqtt_client.py              # 🔄 PLACEHOLDER: MQTT IoT connectivity (future feature)
+
+Required Files (auto-generated/downloaded):
+├── enhanced_expressions.json   # Expression configurations (loaded from server)
+├── robot_env/                  # Python virtual environment
+│   ├── bin/activate           # Environment activation script
+│   └── lib/python3.x/         # Installed packages
+└── audio_cache/               # Cached audio responses (created automatically)
+```
+
+### Main Application Components (`talk.py`)
+
+#### Core Classes:
+1. **VoiceAssistantClient** - API communication and voice processing
+2. **RobotFace** - OpenGL rendering and expression management  
+3. **TextOverlay** - Real-time text display system
+4. **ExpressionManager** - Animation and expression control
+5. **AudioManager** - Audio input/output handling
+6. **ConversationManager** - AI conversation flow
+
+#### Key Features:
+- ✅ **Real-time Voice Recognition**: Continuous audio monitoring
+- ✅ **AI Conversations**: Groq-powered intelligent responses
+- ✅ **Animated Expressions**: 20+ OpenGL-rendered facial expressions
+- ✅ **Text Display**: Word-wrapped, real-time text overlay
+- ✅ **Audio Playback**: High-quality text-to-speech output
+- ✅ **Interactive Controls**: Keyboard and mouse input handling
+- ✅ **Sleep Mode**: Power-saving idle state with breathing animation
+- ✅ **Debug Mode**: Development and troubleshooting tools
+
+### Integration with Server
+
+```
+Raspberry Pi (talk.py) ←→ API Server (server.py) ←→ External Services
+        │                       │                      │
+    ┌───▼────┐              ┌───▼────┐              ┌───▼────┐
+    │ Audio  │              │ Voice  │              │ Groq   │
+    │ I/O    │              │ AI     │              │ AI     │
+    └────────┘              │ API    │              └────────┘
+        │                   └───▲────┘              ┌────────┐
+    ┌───▼────┐                  │                   │Eleven  │
+    │OpenGL  │              ┌───▼────┐              │Labs    │
+    │Display │              │SQLite  │              │TTS     │
+    └────────┘              │Database│              └────────┘
+                           └────────┘
 ```
 
 ## Troubleshooting
