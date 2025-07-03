@@ -112,7 +112,7 @@ NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/user-dashboard
 
 # Robot API Configuration
 NEXT_PUBLIC_ROBOT_API_URL=http://localhost:8001
-ROBOT_API_SECRET=your_robot_api_secret_here
+
 
 # Optional: Database URL for extended features
 DATABASE_URL=your_database_url_here
